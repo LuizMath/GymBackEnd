@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Plans {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+  price Decimal @db.Decimal(10,2)
+  duration_months Int
+  description String @db.Text
+  has_phys_eval Boolean 
+  has_nutritionist Boolean 
+  has_app_access Boolean 
+  modalities PlansOnModalities[]
+  enrollments Enrollments[]
+}
+
+enum Objective {
+  EMAGRECIMENTO
+  HIPERTROFIA
+  RELAXAMENTO
+}
+
+model Modalities {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  description String @db.Text
+  objective Objective
+  plans PlansOnModalities[]
+  schedules Schedules[]
+  experimental_leads Experimental_Leads[]
+}
+
+model PlansOnModalities {
+  plan Plans @relation(fields: [planId], references: [id])
+  planId Int
+  modality Modalities @relation(fields: [modalityId], references: [id])
+  modalityId Int
+  @@id([planId, modalityId])
+}
+
+enum Day {
+  SEGUNDA
+  TERCA
+  QUARTA
+  QUINTA
+  SEXTA
+  SABADO
+}
+
+model Schedules {
+  id   Int    @id @default(autoincrement())
+  modality Modalities @relation(fields: [modalityId], references: [id])
+  modalityId Int
+  day_of_week Day 
+  start_time DateTime
+  end_time DateTime
+  needs_booking Boolean 
+}
+
+model Team {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(50)
+  qualification String @db.VarChar(50)
+  photo_url String @db.VarChar(255)
+}
+
+model Enrollments {
+  id   Int    @id @default(autoincrement())
+  full_name String @db.VarChar(50)
+  cpf  String   @db.VarChar(14)
+  plan Plans @relation(fields: [planId], references: [id])
+  planId Int
+  preferred_time DateTime
+  zip_code String @db.VarChar(9)
+  street String @db.VarChar(255) 
+  number String @db.VarChar(10)
+  terms_accepted Boolean
+  created_at DateTime @default(now())
+} 
+
+enum Status {
+  PENDENTE
+  CONTATADO
+  REALIZADO
+}
+
+model Experimental_Leads {
+  id Int @id @default(autoincrement())
+  name String @db.VarChar(50)
+  contact String @db.VarChar(50)
+  modality Modalities @relation(fields: [modalityId], references: [id])
+  modalityId Int
+  status Status 
+}
