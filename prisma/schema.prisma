@@ -7,6 +7,12 @@ datasource db {
   provider = "mysql"
 }
 
+model User {
+  id Int @id @default(autoincrement())
+  email String @db.VarChar(255) @unique
+  enrollments Enrollments[]
+}
+
 model Plans {
   id   Int    @id @default(autoincrement())
   name String @db.VarChar(50)
@@ -76,6 +82,8 @@ model Enrollments {
   cpf  String   @db.VarChar(14)
   plan Plans @relation(fields: [planId], references: [id])
   planId Int
+  user User @relation(fields: [userId], references: [id])
+  userId Int
   preferred_time DateTime
   zip_code String @db.VarChar(9)
   street String @db.VarChar(255) 
