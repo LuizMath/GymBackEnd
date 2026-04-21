@@ -6,5 +6,5 @@ export async function getPlans(req: FastifyRequest, reply: FastifyReply) {
   if (plans.length !== 0) {
     return reply.status(200).send({ data: plans });
   }
-  return reply.status(404).send({ error: "sem planos definidos" });
+  return reply.notFound("Sem planos definidos");
 }
