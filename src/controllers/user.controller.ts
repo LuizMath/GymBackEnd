@@ -1,20 +1,30 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import z, { regexes } from "zod/v4";
 import { createUserService, getUserByEmail } from "../services/user.service";
+import { emailSchema } from "../schemas/userSchema";
 
 export async function createUser(req: FastifyRequest, reply: FastifyReply) {
-  const emailSchema = z.strictObject({
-    email: z.email({ pattern: z.regexes.email }),
-  });
   const result = emailSchema.safeParse(req.body);
   if (!result.success) {
-    throw req.server.httpErrors.badRequest("");
+    throw req.server.httpErrors.badRequest("Dados inválidos!");
   }
   const { email } = result.data;
-  const existsUser = await getUserByEmail(email);
-  if (existsUser) {
+  const user = await getUserByEmail(email);
+  if (user) {
     return reply.conflict("Usuário já existe!");
   }
   const createUser = await createUserService(email);
   return reply.status(201).send({ message: "Usuário criado com sucesso!" });
+}
+
+export async function getUser(req: FastifyRequest, reply: FastifyReply) {
+  const result = emailSchema.safeParse(req.body);
+  if (!result.success) {
+    throw req.server.httpErrors.badRequest("Dados inválidos!");
+  }
+  const { email } = result.data;
+  const user = await getUserByEmail(email);
+  if (user) {
+    return reply.status(200).send({ user });
+  }
+  return reply.notFound("Usuário inexistente!");
 }

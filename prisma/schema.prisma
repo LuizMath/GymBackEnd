@@ -64,9 +64,11 @@ model Schedules {
   modality Modalities @relation(fields: [modalityId], references: [id])
   modalityId Int
   day_of_week Day 
-  start_time DateTime
-  end_time DateTime
+  max_capacity Int
+  start_time String @db.VarChar(5)
+  end_time String @db.VarChar(5)
   needs_booking Boolean 
+  booking Booking[]
 }
 
 model Team {
@@ -90,6 +92,7 @@ model Enrollments {
   number String @db.VarChar(10)
   terms_accepted Boolean
   created_at DateTime @default(now())
+  booking Booking[]
 } 
 
 enum Status {
@@ -105,4 +108,22 @@ model Experimental_Leads {
   modality Modalities @relation(fields: [modalityId], references: [id])
   modalityId Int
   status Status 
+}
+
+enum StatusBooking {
+  PENDENTE
+  CONFIRMADO
+  CANCELADO
+  FALTOU
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+  booking_date DateTime @db.Date
+  created_at DateTime @default(now())
+  status StatusBooking @default(PENDENTE)
+  enrollment Enrollments @relation(fields: [enrollmentId], references: [id])
+  enrollmentId Int
+  schedule Schedules @relation(fields: [scheduleId], references: [id])
+  scheduleId Int
 }
