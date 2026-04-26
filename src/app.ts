@@ -4,6 +4,7 @@ import plansRoutes from "./routes/plans.routes";
 import fastifySensible from "@fastify/sensible";
 import userRoutes from "./routes/user.routes";
 import schedulesRoutes from "./routes/schedules.routes";
+import bookingRoutes from "./routes/booking.routes";
 
 export const app = fastify();
 
@@ -12,6 +13,7 @@ app.register(fastifySensible);
 app.register(plansRoutes);
 app.register(userRoutes);
 app.register(schedulesRoutes);
+app.register(bookingRoutes);
 
 app.setErrorHandler((error: any, req, reply) => {
   const statusCode = error.statusCode ?? 500;
