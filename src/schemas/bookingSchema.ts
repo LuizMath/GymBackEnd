@@ -6,4 +6,10 @@ const createBookingSchema = z.strictObject({
   booking_date: z.iso.date(),
 });
 
-export { createBookingSchema };
+const createExperimentalBookingSchema = z.strictObject({
+  name: z.string().max(50),
+  contact: z.string().max(50),
+  modality: z.number(),
+});
+
+export { createBookingSchema, createExperimentalBookingSchema };

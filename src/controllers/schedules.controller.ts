@@ -4,7 +4,6 @@ import {
   getSchedulesByModalityService,
 } from "../services/schedules.service";
 import { nameSchema, yearSchema } from "../schemas/schedulesSchema";
-import { getAvailablesDays } from "../utils/generateAgenda";
 
 export async function getHolidays(req: FastifyRequest, reply: FastifyReply) {
   const result = yearSchema.safeParse(req.body);
@@ -13,7 +12,6 @@ export async function getHolidays(req: FastifyRequest, reply: FastifyReply) {
   }
   const { year } = result.data;
   const holidays = await getHolidaysService(year);
-  getAvailablesDays();
   if (holidays) {
     return reply.status(200).send({ holidays });
   }
@@ -35,4 +33,3 @@ export async function getSchedulesByModality(
   }
   return reply.notFound("Sem agenda definida!");
 }
-

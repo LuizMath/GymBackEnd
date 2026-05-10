@@ -19,3 +19,12 @@ export async function getSchedulesByModalityService(name?: string) {
     },
   });
 }
+
+export async function getSchedulesByIdService(id: number) {
+  return prisma.schedules.findUnique({
+    where: { id },
+    include: {
+      modality: true,
+    },
+  });
+}

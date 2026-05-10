@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Experimental_Leads` MODIFY `status` ENUM('PENDENTE', 'CONTATADO', 'REALIZADO') NOT NULL DEFAULT 'PENDENTE';

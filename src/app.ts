@@ -5,15 +5,21 @@ import fastifySensible from "@fastify/sensible";
 import userRoutes from "./routes/user.routes";
 import schedulesRoutes from "./routes/schedules.routes";
 import bookingRoutes from "./routes/booking.routes";
+import enrollmentRoutes from "./routes/enrollment.routes";
+import cors from "@fastify/cors";
 
 export const app = fastify();
 
+app.register(cors, {
+  origin: "*",
+});
 app.register(prismaPlugin);
 app.register(fastifySensible);
 app.register(plansRoutes);
 app.register(userRoutes);
 app.register(schedulesRoutes);
 app.register(bookingRoutes);
+app.register(enrollmentRoutes);
 
 app.setErrorHandler((error: any, req, reply) => {
   const statusCode = error.statusCode ?? 500;
