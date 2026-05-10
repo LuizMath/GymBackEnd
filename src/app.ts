@@ -6,6 +6,7 @@ import userRoutes from "./routes/user.routes";
 import schedulesRoutes from "./routes/schedules.routes";
 import bookingRoutes from "./routes/booking.routes";
 import enrollmentRoutes from "./routes/enrollment.routes";
+import teamRoutes from "./routes/team.routes";
 import cors from "@fastify/cors";
 
 export const app = fastify();
@@ -20,6 +21,7 @@ app.register(userRoutes);
 app.register(schedulesRoutes);
 app.register(bookingRoutes);
 app.register(enrollmentRoutes);
+app.register(teamRoutes);
 
 app.setErrorHandler((error: any, req, reply) => {
   const statusCode = error.statusCode ?? 500;
