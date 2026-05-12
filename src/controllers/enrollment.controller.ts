@@ -9,6 +9,7 @@ export async function createEnrollment(
 ) {
   const result = createEnrollmentSchema.safeParse(req.body);
   if (!result.success) {
+    req.log.warn({ issues: result.error.issues }, "enrollment validação falhou");
     throw req.server.httpErrors.badRequest("Dados inválidos!");
   }
   const {
@@ -21,8 +22,16 @@ export async function createEnrollment(
     street,
     number,
     terms_accepted,
+    email,
+    phone,
+    birthdate,
+    complement,
+    neighborhood,
+    city,
+    state,
   } = result.data;
-  const createEnrollment = await createEnrollmentService({
+
+  await createEnrollmentService({
     full_name,
     cpf,
     zip_code,
@@ -32,6 +41,13 @@ export async function createEnrollment(
     street,
     number,
     terms_accepted,
+    email: email ?? null,
+    phone: phone ?? null,
+    birthdate: birthdate ? moment(birthdate, "YYYY-MM-DD").utc(true).toDate() : null,
+    complement: complement && complement.length > 0 ? complement : null,
+    neighborhood: neighborhood ?? null,
+    city: city ?? null,
+    state: state ?? null,
   });
   return reply.status(201).send({ message: "Matrícula feita com sucesso!" });
 }

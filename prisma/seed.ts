@@ -82,6 +82,11 @@ async function main() {
         description: "Técnicas de relaxamento e foco mental",
         objective: "RELAXAMENTO",
       },
+      {
+        name: "Personal Trainer",
+        description: "Acompanhamento individual com profissional dedicado",
+        objective: "HIPERTROFIA",
+      },
     ],
   });
   const plans = await prisma.plans.findMany();
@@ -95,6 +100,7 @@ async function main() {
     data: [
       { planId: planFit.id, modalityId: mod("Musculação").id },
       { planId: planFit.id, modalityId: mod("Cardio").id },
+      { planId: planFit.id, modalityId: mod("Funcional").id },
       ...mods.map((m) => ({
         planId: planTotal.id,
         modalityId: m.id,
@@ -224,6 +230,47 @@ async function main() {
         end_time: "20:00",
         modalityId: mod("HIIT").id,
         max_capacity: 15,
+        needs_booking: true,
+      },
+      // ── Sábado ──────────────────────────────────────────────────────────
+      {
+        day_of_week: "SABADO",
+        start_time: "08:00",
+        end_time: "09:00",
+        modalityId: mod("Yoga").id,
+        max_capacity: 12,
+        needs_booking: true,
+      },
+      {
+        day_of_week: "SABADO",
+        start_time: "09:00",
+        end_time: "10:30",
+        modalityId: mod("Cross Training").id,
+        max_capacity: 20,
+        needs_booking: true,
+      },
+      {
+        day_of_week: "SABADO",
+        start_time: "10:00",
+        end_time: "12:00",
+        modalityId: mod("Musculação").id,
+        max_capacity: 30,
+        needs_booking: false,
+      },
+      {
+        day_of_week: "SABADO",
+        start_time: "11:00",
+        end_time: "12:00",
+        modalityId: mod("Pilates").id,
+        max_capacity: 10,
+        needs_booking: true,
+      },
+      {
+        day_of_week: "SABADO",
+        start_time: "12:00",
+        end_time: "13:00",
+        modalityId: mod("Personal Trainer").id,
+        max_capacity: 4,
         needs_booking: true,
       },
     ],
