@@ -31,10 +31,13 @@ export async function createEnrollment(
     state,
   } = result.data;
 
+  const cpfDigits = cpf.replace(/\D/g, "");
+  const zipDigits = zip_code.replace(/\D/g, "");
+
   await createEnrollmentService({
     full_name,
-    cpf,
-    zip_code,
+    cpf: `${cpfDigits.slice(0, 3)}.${cpfDigits.slice(3, 6)}.${cpfDigits.slice(6, 9)}-${cpfDigits.slice(9, 11)}`,
+    zip_code: `${zipDigits.slice(0, 5)}-${zipDigits.slice(5, 8)}`,
     plan: { connect: { id: plan } },
     user: { connect: { id: user } },
     preferred_time: moment(preferred_time, "HH:mm").utc(true).toDate(),

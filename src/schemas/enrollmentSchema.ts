@@ -2,8 +2,8 @@ import z from "zod/v4";
 
 const createEnrollmentSchema = z.object({
   full_name: z.string().min(3).max(80),
-  cpf: z.string().length(14),
-  zip_code: z.string().length(9),
+  cpf: z.string().regex(/^\d{11}$|^\d{3}\.\d{3}\.\d{3}-\d{2}$/, "CPF inválido"),
+  zip_code: z.string().regex(/^\d{8}$|^\d{5}-\d{3}$/, "CEP inválido"),
   plan: z.number().int().positive(),
   user: z.number().int().positive(),
   preferred_time: z.string().regex(/^\d{2}:\d{2}$/, "Formato esperado: HH:mm"),
