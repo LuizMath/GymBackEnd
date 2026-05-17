@@ -28,3 +28,17 @@ export async function createExperimentalBookingService({
     },
   });
 }
+
+export async function confirmBookingService(id: number) {
+  return await prisma.booking.update({
+    where: { id },
+    data: { status: "CONFIRMADO" },
+  });
+}
+
+export async function cancelBookingService(id: number) {
+  return await prisma.booking.update({
+    where: { id },
+    data: { status: "CANCELADO" },
+  });
+}

@@ -2,10 +2,13 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import {
   createBookingSchema,
   createExperimentalBookingSchema,
+  bookingIdParamSchema,
 } from "../schemas/bookingSchema";
 import {
   createBookingService,
   createExperimentalBookingService,
+  confirmBookingService,
+  cancelBookingService,
 } from "../services/booking.service";
 import moment from "moment";
 import { getAvailablesDays } from "../utils/generateAgenda";
@@ -67,4 +70,22 @@ export async function createExperimentalBooking(
   return reply
     .status(201)
     .send({ message: "Aula experimental agendada com sucesso!" });
+}
+
+export async function confirmBooking(req: FastifyRequest, reply: FastifyReply) {
+  const result = bookingIdParamSchema.safeParse(req.params);
+  if (!result.success) {
+    throw req.server.httpErrors.badRequest("ID inválido");
+  }
+  await confirmBookingService(result.data.id);
+  return reply.send({ message: "Presença confirmada!" });
+}
+
+export async function cancelBooking(req: FastifyRequest, reply: FastifyReply) {
+  const result = bookingIdParamSchema.safeParse(req.params);
+  if (!result.success) {
+    throw req.server.httpErrors.badRequest("ID inválido");
+  }
+  await cancelBookingService(result.data.id);
+  return reply.send({ message: "Presença cancelada!" });
 }

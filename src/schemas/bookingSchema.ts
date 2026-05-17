@@ -12,4 +12,12 @@ const createExperimentalBookingSchema = z.strictObject({
   modality: z.number(),
 });
 
-export { createBookingSchema, createExperimentalBookingSchema };
+const bookingIdParamSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
+export {
+  createBookingSchema,
+  createExperimentalBookingSchema,
+  bookingIdParamSchema,
+};
