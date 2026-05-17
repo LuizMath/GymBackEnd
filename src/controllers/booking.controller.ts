@@ -3,12 +3,14 @@ import {
   createBookingSchema,
   createExperimentalBookingSchema,
   bookingIdParamSchema,
+  getBookingsByUserSchema,
 } from "../schemas/bookingSchema";
 import {
   createBookingService,
   createExperimentalBookingService,
   confirmBookingService,
   cancelBookingService,
+  getBookingsByUserService,
 } from "../services/booking.service";
 import moment from "moment";
 import { getAvailablesDays } from "../utils/generateAgenda";
@@ -88,4 +90,13 @@ export async function cancelBooking(req: FastifyRequest, reply: FastifyReply) {
   }
   await cancelBookingService(result.data.id);
   return reply.send({ message: "Presença cancelada!" });
+}
+
+export async function getBookingsByUser(req: FastifyRequest, reply: FastifyReply) {
+  const result = getBookingsByUserSchema.safeParse(req.body);
+  if (!result.success) {
+    throw req.server.httpErrors.badRequest("Dados inválidos");
+  }
+  const bookings = await getBookingsByUserService(result.data.userId);
+  return reply.send({ data: bookings });
 }

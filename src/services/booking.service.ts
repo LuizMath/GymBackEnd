@@ -42,3 +42,13 @@ export async function cancelBookingService(id: number) {
     data: { status: "CANCELADO" },
   });
 }
+
+export async function getBookingsByUserService(userId: number) {
+  return await prisma.booking.findMany({
+    where: { enrollment: { userId } },
+    include: {
+      schedule: { include: { modality: true } },
+    },
+    orderBy: { booking_date: "desc" },
+  });
+}

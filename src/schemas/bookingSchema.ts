@@ -16,8 +16,13 @@ const bookingIdParamSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
+const getBookingsByUserSchema = z.strictObject({
+  userId: z.number().int().positive(),
+});
+
 export {
   createBookingSchema,
   createExperimentalBookingSchema,
   bookingIdParamSchema,
+  getBookingsByUserSchema,
 };
