@@ -23,4 +23,8 @@ const createEnrollmentSchema = z.object({
   state: z.string().length(2).optional(),
 });
 
-export { createEnrollmentSchema };
+const getEnrollmentByUserSchema = z.object({
+  userId: z.coerce.number().int().positive(),
+});
+
+export { createEnrollmentSchema, getEnrollmentByUserSchema };

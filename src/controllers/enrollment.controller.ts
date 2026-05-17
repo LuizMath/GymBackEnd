@@ -1,6 +1,12 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { createEnrollmentSchema } from "../schemas/enrollmentSchema";
-import { createEnrollmentService } from "../services/enrollment.service";
+import {
+  createEnrollmentSchema,
+  getEnrollmentByUserSchema,
+} from "../schemas/enrollmentSchema";
+import {
+  createEnrollmentService,
+  getEnrollmentByUserService,
+} from "../services/enrollment.service";
 import moment from "moment";
 
 export async function createEnrollment(
@@ -53,4 +59,19 @@ export async function createEnrollment(
     state: state ?? null,
   });
   return reply.status(201).send({ message: "Matrícula feita com sucesso!" });
+}
+
+export async function getEnrollmentByUser(
+  req: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const result = getEnrollmentByUserSchema.safeParse(req.params);
+  if (!result.success) {
+    throw req.server.httpErrors.badRequest("userId inválido");
+  }
+  const enrollment = await getEnrollmentByUserService(result.data.userId);
+  if (!enrollment) {
+    throw req.server.httpErrors.notFound("Matrícula não encontrada");
+  }
+  return reply.send({ data: enrollment });
 }
